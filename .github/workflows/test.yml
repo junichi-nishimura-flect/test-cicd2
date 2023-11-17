@@ -15,4 +15,5 @@ jobs:
         run: |      
           echo ${{ vars.CDK_BRANCH_BATCH }}
           echo ${{ vars.CDK_BRANCH_CDK }}
-          echo ${{ vars.CDK_STACK_NAME }}      
+          echo ${{ vars.CDK_STACK_NAME }}     
+          echo ${{ github.event.repository.name }}
