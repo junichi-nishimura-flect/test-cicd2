@@ -18,3 +18,13 @@ jobs:
           echo ${{ vars.CDK_STACK_NAME }}     
           echo ${{ github.event.repository.name }}
           echo ${{ github.sha }}
+      
+      - name : Notification on Success
+        if: ${{ success() }}
+        run: |      
+          echo 成功しました
+
+      - name : Notification on Success
+        if: ${{ failure() }}
+        run: |      
+          echo 失敗しました
