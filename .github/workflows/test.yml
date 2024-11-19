@@ -1,12 +1,21 @@
 name: test-cicd
 
 on:
+  # プルリクエストのマージ（Close）でフロー実行
+  pull_request:
+    types:
+      - closed
+    branches:
+      - feature/deploy-test
+
   # 手動実行できるようにする
   workflow_dispatch:
 
 jobs:
   # デプロイJOB
   deploy:
+    # プルリクエストがマージされたときに実行 ※コンソールからCloseされた時は対象外
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     environment:
       name: ${{ (github.ref == 'refs/heads/develop' && 'develop') || (github.ref == 'refs/heads/staging' && 'staging') || (github.ref == 'refs/heads/main' && 'production') || '' }}

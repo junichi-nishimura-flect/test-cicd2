@@ -1,0 +1,21 @@
+name: tag-test
+
+on:
+  push:
+    tags:
+      # v9.9.9-keycloak / dev-release-keycloak-yyyy-mm-dd-99
+      - "v[0-9]+.[0-9]+.[0-9]+-keycloak"
+      - "dev-release-keycloak-20[0-9][0-9]-[01][0-9]-[03][0-9]-[0-9]+"
+  workflow_dispatch:
+
+jobs:
+  # デプロイJOB
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. 環境を確認
+      - name: 1. Check Environment
+        run: |
+          echo ${GITHUB_REF#refs/tags/}
+          echo 成功しました
+
