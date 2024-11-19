@@ -18,6 +18,7 @@ jobs:
         run: |
           echo 'tag' : $GITHUB_REF#refs/tags/
           echo 'github_ref' ${{ github.ref }}
+          echo 'ref_name' ${{ github.ref_name }}
         # echo 'tag' => ${GITHUB_REF#refs/tags/}
         # echo github_ref : ${{ github.ref }}
         # echo 'ref_name :' '${{ github.ref_name }}'
