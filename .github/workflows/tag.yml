@@ -16,11 +16,12 @@ jobs:
       # 1. 環境を確認
       - name: 1. Check Environment
         run: |
-          echo '1' $GITHUB_REF
-          echo '2' ${{ github.ref }}
+          echo tag => ${GITHUB_REF#refs/tags/}
           echo github_ref : ${{ github.ref }}
-          echo '3' ${{ github.ref_name }}
-          echo '4' ${{ github.head_ref }}
-          echo '5' ${{ github.base_ref }}
+          echo ref_name  ${{ github.ref_name }}
+          echo event_repository_name : ${{ github.event.repository.name }}
+          echo sha : ${{ github.sha }}
+          echo head_ref ${{ github.head_ref }}
+          echo base_ref ${{ github.base_ref }}
           echo 成功しました
 
