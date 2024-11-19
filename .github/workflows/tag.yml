@@ -19,6 +19,10 @@ jobs:
           echo 'tag' : $GITHUB_REF#refs/tags/
           echo 'github_ref' ${{ github.ref }}
           echo 'ref_name' ${{ github.ref_name }}
+          echo 'event_repository_name' ${{ github.event.repository.name }}
+          echo 'sha' ${{ github.sha }}
+          echo 'head_ref' ${{ github.head_ref }}
+          echo 'base_ref' ${{ github.base_ref }}
         # echo 'tag' => ${GITHUB_REF#refs/tags/}
         # echo github_ref : ${{ github.ref }}
         # echo 'ref_name :' '${{ github.ref_name }}'
