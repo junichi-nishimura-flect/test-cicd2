@@ -36,17 +36,23 @@ const TimeUtils = require("./time-utils");
     });
 
   // 3. タグの一覧をログ出力
-  console.log(`----- 現時点のタグの一覧 (${TimeUtils.formatCurrent()}) -----`);
+  console.log(`----- 削除前のタグの一覧 (${TimeUtils.formatCurrent()}) -----`);
   for (const tag of tags) {
     console.log(
-      `${tag.time.format("YYYY-MM-DD HH:mm:ssZ")} ${tag.hash} ${tag.tag} ${
-        tag.user
-      }`
+      `${TimeUtils.formatIso(tag.time)} ${tag.hash} ${tag.tag} ${tag.user}`
     );
   }
 
-  // 4. git tagの一覧から対象のtagを抽出する
-  const threshold = TimeUtils.daysAgo(3);
+  // 4. 保持期間は環境変数「TAG_RETENTION_DAYS」で定義。未定義の場合は7日とする
+  let threshold = TimeUtils.daysAgo(7); // デフォルトで7日前
+  if (process.env.TAG_RETENTION_DAYS) {
+    threshold = TimeUtils.daysAgo(parseFloat(process.env.TAG_RETENTION_DAYS));
+  }
+  console.log(
+    `----- 削除対象の期間 (${TimeUtils.formatIso(threshold)} より前) -----`
+  );
+
+  // 5. git tagの一覧から対象のtagを抽出する
   const tags4Delete = tags.filter((tag) => {
     // N日前に作成されたタグ
     if (TimeUtils.isSameOrBefore(tag.time, threshold)) {
@@ -60,17 +66,15 @@ const TimeUtils = require("./time-utils");
     return false;
   });
 
-  // 5. タグを削除する
-  console.log(`----- 削除対象のタグ (${TimeUtils.formatCurrent()}) -----`);
-
+  // 6. タグを削除する
+  console.log(`----- 削除対象のタグ -----`);
   for (const tag of tags4Delete) {
     // ログに出力
     console.log(
-      `${tag.time.format("YYYY-MM-DD HH:mm:ssZ")} ${tag.hash} ${tag.tag} ${
-        tag.user
-      }`
+      `${TimeUtils.formatIso(tag.time)} ${tag.hash} ${tag.tag} ${tag.user}`
     );
     // タグ削除コマンドの実行
     const result = await git.push(["origin", "--delete", tag.tag]);
+    // console.log(JSON.stringify(result));
   }
 })();

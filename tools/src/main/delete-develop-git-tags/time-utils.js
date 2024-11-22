@@ -1,22 +1,29 @@
-const dayjs = require('dayjs');
-dayjs.extend(require('dayjs/plugin/timezone'));
-dayjs.extend(require('dayjs/plugin/utc'));
+const dayjs = require("dayjs");
+dayjs.extend(require("dayjs/plugin/timezone"));
+dayjs.extend(require("dayjs/plugin/utc"));
 const isSameOrBefore = require("dayjs/plugin/isSameOrBefore");
 dayjs.extend(isSameOrBefore);
-const timezone = 'Asia/Tokyo';
+const timezone = "Asia/Tokyo";
 dayjs.tz.setDefault(timezone);
 
 /**
- * 現在時刻を返します。
+ * 現在の日付を返します。
  * @returns {dayjs.Dayjs} 現在時刻の日付オブジェクト
  */
 exports.current = () => dayjs.tz();
 
 /**
- * 現在時刻を「YYYY-MM-DD hh:mm:ss」の文字列で返します。
- * @return {string} 「YYYY-MM-DD HHmmss）の現在時刻
+ * 現在時刻を「"YYYY-MM-DD HH:mm:ssZ」の文字列で返します。
+ * @return {string} 「YYYY-MM-DD HH:mm:ssZ」形式の現在時刻
  */
-exports.formatCurrent = () => exports.current().format('YYYY-MM-DD HH:mm:ssZ');
+exports.formatCurrent = () => exports.current().format("YYYY-MM-DD HH:mm:ssZ");
+
+/**
+ * 指定された日付を「"YYYY-MM-DD HH:mm:ssZ」の文字列で返します。
+ * @param {dayjs.Dayjs} day 日付
+ * @return {string} 「YYYY-MM-DD HH:mm:ssZ」形式の現在時刻
+ */
+exports.formatIso = (day) => day.format("YYYY-MM-DD HH:mm:ssZ");
 
 /**
  * 指定された日数前の日付を返します。
@@ -30,7 +37,8 @@ exports.daysAgo = (days) => exports.current().subtract(days, "day");
  * @param format 時刻文字列のフォーマット。未指定の場合は「YYYY-MM-DDTHH:mm:ssZ'」とする。
  * @returns {dayjs.Dayjs} 指定された時刻文字列の日付オブジェクト
  */
-exports.utc2JstDay = (time, format = 'YYYY-MM-DDTHH:mm:ssZ') => dayjs.utc(time, format).tz(timezone);
+exports.utc2JstDay = (time, format = "YYYY-MM-DDTHH:mm:ssZ") =>
+  dayjs.utc(time, format).tz(timezone);
 
 /**
  * ２つの日付を比較し２つ目が１つ目より前の場合、trueを返します。
