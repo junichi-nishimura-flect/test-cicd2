@@ -6,7 +6,7 @@ const TimeUtils = require("./time-utils");
   const tagsRow = await git.raw([
     "for-each-ref",
     "--sort=-taggerdate",
-    "--format='%(taggerdate:iso) %(objectname) %(tag) %(taggername)'",
+    "--format='%(taggerdate:iso) %(objectname) %(tag) %(taggername) %(subject)'",
     "refs/tags",
   ]);
 
@@ -32,6 +32,7 @@ const TimeUtils = require("./time-utils");
         hash: columns[0], // 2つ目の要素はコミットハッシュ
         tag: columns[1], // 3つ目の要素はタグ
         user: columns[2], // 4つ目の要素はタグを作成したユーザ
+        message: columns.slice(3).join(" ") // 5つ目以降の要素はメッセージ
       };
     });
 
@@ -39,7 +40,7 @@ const TimeUtils = require("./time-utils");
   console.log(`----- 削除前のタグの一覧 (${TimeUtils.formatCurrent()}) -----`);
   for (const tag of tags) {
     console.log(
-      `${TimeUtils.formatIso(tag.time)} ${tag.hash} ${tag.tag} ${tag.user}`
+      `${TimeUtils.formatIso(tag.time)} ${tag.hash} ${tag.tag} ${tag.user} ${tag.message}`
     );
   }
 
@@ -71,7 +72,7 @@ const TimeUtils = require("./time-utils");
   for (const tag of tags4Delete) {
     // ログに出力
     console.log(
-      `${TimeUtils.formatIso(tag.time)} ${tag.hash} ${tag.tag} ${tag.user}`
+      `${TimeUtils.formatIso(tag.time)} ${tag.hash} ${tag.tag} ${tag.user} ${tag.message}`
     );
     // タグ削除コマンドの実行
     const result = await git.push(["origin", "--delete", tag.tag]);
