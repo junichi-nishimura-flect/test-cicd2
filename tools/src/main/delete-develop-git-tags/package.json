@@ -1,0 +1,15 @@
+{
+  "name": "delete-develop-git-tags",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "delete-tag": "node delete-tag.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "開発用のタグを定期的に削除するプログラムです",
+  "dependencies": {
+    "dayjs": "^1.11.13",
+    "simple-git": "^3.27.0"
+  }
+}
