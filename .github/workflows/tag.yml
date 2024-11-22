@@ -5,13 +5,15 @@ on:
     tags:
       # v9.9.9-keycloak / dev-release-keycloak-yyyy-mm-dd-99
       - "v[0-9]+.[0-9]+.[0-9]+-keycloak"
-      - "dev-release-keycloak-20[0-9][0-9]-[01][0-9]-[03][0-9]-[0-9]+"
+      - "dev-release-keycloak-20[0-9][0-9]-[01][0-9]-[0-3][0-9]-[0-9]+"
   workflow_dispatch:
 
 jobs:
   # デプロイJOB
   deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: production
     steps:
       # 1. 環境を確認
       - name: 1. Check Environment
@@ -24,3 +26,19 @@ jobs:
           echo 'head_ref' : ${{ github.head_ref }}
           echo 'base_ref' : ${{ github.base_ref }}
 
+      # 2. GitHubからソースコードをチェックアウト
+      - name: 2. Github Repository Checkout
+        uses: actions/checkout@v4.2.2
+        with:
+          token: ${{ vars.ACCESS_TOKEN }}
+          fetch-depth: 0
+
+      # 3. 別リポジトリへのプッシュ
+      # remote(testOrigin) の リポジトリにおいて、Workflow permissionsの権限設定を「Read and write permissions」にしておく必要あり
+      - name: 3. Push Other Repository
+        run: |
+          git branch
+          git branch -r
+          git remote add testOrigin https://github.com/junichi-nishimura-flect/test-cicd2.git
+          git checkout -b feature/tmp ${{ github.ref }}
+          git push testOrigin feature/tmp:develop/deploy -f
