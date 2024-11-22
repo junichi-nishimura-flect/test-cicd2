@@ -1,0 +1,40 @@
+name: tag-delete
+
+on:
+  schedule:
+    # 日次 JST 0:00 (UTC 15:00) で起動する
+    - cron: "0 15 * * *"
+  
+    # 手動実行できるようにする
+  workflow_dispatch:
+
+jobs:
+  # デプロイJOB
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+    steps:
+      # 1. 環境を確認
+      - name: 1. Check Environment
+        run: |
+          echo 'tag' : $GITHUB_REF#refs/tags/
+          echo 'github_ref' : ${{ github.ref }}
+          echo 'ref_name' : ${{ github.ref_name }}
+          echo 'event_repository_name' : ${{ github.event.repository.name }}
+          echo 'sha' : ${{ github.sha }}
+          echo 'head_ref' : ${{ github.head_ref }}
+          echo 'base_ref' : ${{ github.base_ref }}
+
+      # 2. GitHubからソースコードをチェックアウト
+      - name: 2. Github Repository Checkout
+        uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 0
+
+      # 3. タグの削除を実行
+      - name: 3. Delete tags for develop
+        run: |
+          cd  ${{ vars.DELETE_TAG_TOOL_PATH }}
+          npm install
+          npm run delete-tag
