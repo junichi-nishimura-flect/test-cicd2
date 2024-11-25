@@ -46,6 +46,7 @@ const TimeUtils = require("./time-utils");
 
   // 4. 保持期間は環境変数「TAG_RETENTION_DAYS」で定義。未定義の場合は7日とする
   let threshold = TimeUtils.daysAgo(7); // デフォルトで7日前
+  console.log(`TAG_RETENTION_DAYS => ${process.env.TAG_RETENTION_DAYS}`);
   if (process.env.TAG_RETENTION_DAYS) {
     threshold = TimeUtils.daysAgo(parseFloat(process.env.TAG_RETENTION_DAYS));
   }
