@@ -35,6 +35,7 @@ jobs:
       # 3. タグの削除を実行
       - name: 3. Delete tags for develop
         run: |
+          export TAG_RETENTION_DAYS=${{ vars.TAG_RETENTION_DAYS }}
           cd  ${{ vars.DELETE_TAG_TOOL_PATH }}
           npm install
           npm run delete-tag
