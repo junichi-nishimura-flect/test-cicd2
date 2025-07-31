@@ -1,9 +1,9 @@
 name: tag-delete
 
 on:
-  schedule:
-    # 日次 JST 0:00 (UTC 15:00) で起動する
-    - cron: "0 15 * * *"
+  # schedule:
+  #   # 日次 JST 0:00 (UTC 15:00) で起動する
+  #   - cron: "0 15 * * *"
   
     # 手動実行できるようにする
   workflow_dispatch:
